@@ -1,0 +1,51 @@
+#custom-chart {
+    background-color: aquamarine !important;
+    position: relative;
+    transition: margin-left 0.3s; 
+    display: flex;
+    padding: 1rem 1rem;
+}
+h2{
+    font-size: 3em;
+}
+
+#custom-chart .form-container {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  #custom-chart .form-group {
+    margin-bottom: 10px;
+  }
+  
+  #custom-chart label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 15px;
+  }
+  
+  #custom-chart input[type="date"] {
+    width: 10rem;
+    padding: 12px 10px;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+    
+  }
+  
+#updateButton{
+        background-color: #0808f5;
+        color: #fff;
+        padding: 10px 15px;
+        padding-bottom: 5px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease-in-out;
+      }
+      
+      #updateButton:hover {
+        background-color: #2980b9;
+      }
+  

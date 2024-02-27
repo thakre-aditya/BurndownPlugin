@@ -1,0 +1,86 @@
+
+
+<h2>Chart for issues count per day</h2>
+
+<div class="container-fluid mt-5" id="custom-chart">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <%= form_tag burndowns_path, method: :get, id: 'burndowns_form' do %>
+                <div class="form-group">
+                    <%= label_tag 'version_id', 'Select Version:' %>
+                    <%= select_tag 'version_id', options_from_collection_for_select(@versions, 'id', 'name', selected: @selected_version_id), prompt: 'Select a Version' %>
+                </div>
+
+                <div class="form-group">
+                    <label for="start_date">Start Date:</label>
+                    <%= date_field_tag 'start_date', Date.today.beginning_of_month, type: 'date', class: 'form-control', id: 'start_date', name: 'start_date', required: true %>
+                </div>
+
+                <div class="form-group">
+                    <label for="end_date">End Date:</label>
+                    <%= date_field_tag 'end_date', Date.today, type: 'date', class: 'form-control', id: 'end_date', name: 'end_date', required: true %>
+                </div>
+
+                <button id="updateButton" type="submit" class="btn btn-primary">Submit</button>
+            <% end %>
+
+            <div id="chart"></div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+            
+                // Initialize the chart with an empty dataset
+                const options = {
+                chart: {
+                    type: 'line'
+                },
+                series: [{
+                    name: 'Issues Count',
+                    data: []
+                }],
+                xaxis: {
+                    type: 'datetime',
+                    categories: []
+                }
+                };
+
+                const chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+
+                // Check if @issues_count_per_day is defined and not empty
+                const issuesCountPerDayData = <%= @issues_count_per_day.to_json.html_safe %>;
+
+                if (issuesCountPerDayData && Object.keys(issuesCountPerDayData).length > 0) {
+                const issuesCountPerDay = issuesCountPerDayData;
+
+                const updatedOptions = {
+                    series: [{
+                    name: 'Issues Count',
+                    data: Object.entries(issuesCountPerDay).map(([date, count]) => [new Date(date).getTime(), count])
+                    }],
+                    xaxis: {
+                    type: 'datetime',
+                    categories: Object.keys(issuesCountPerDay).map(date => new Date(date).getTime())
+                    }
+                };
+
+                chart.updateOptions(updatedOptions);
+                } else {
+                    console.error('Issues count data is not available.');
+                }
+                });
+            </script>
+
+          
+
+          
+
+        </div>
+    </div>
+</div>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'burndown', plugin: 'burndowns' %>
+  <%= javascript_include_tag 'burndown', plugin: 'burndowns' %>
+  <%= javascript_include_tag 'https://cdn.jsdelivr.net/npm/apexcharts' %>
+<% end %>
